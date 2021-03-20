@@ -133,3 +133,21 @@ urlpatterns = [
 ```
 
 ## Part4
+request.POST는 키로 전송된 자료에 접근할 수 있도록 해주는 사전과 같은 객체입니다.
+이 경우, request.POST['choice'] 는 선택된 설문의 ID를 문자열로 반환합니다.
+request.POST 의 값은 항상 문자열들입니다.
+```python
+return HttpResponseRedirect(reverse('polls:results', args=(question.id,)))
+```
+### HttpResponseRedirect()
+HttpResponseRedirect 는 하나의 인수를 받습니다: 그 인수는 사용자가 재전송될 URL 입니다.
+
+### reverse()
+이 함수는 뷰 함수에서 URL을 하드코딩하지 않도록 도와줍니다.
+제어를 전달하기 원하는 뷰의 이름을, URL패턴의 변수부분을 조합해서 해당 뷰를 가리킵니다.<br>
+<br>
+request는 HttpRequest 개체입니다.
+HttpRequest 개체에 대해 더 알고 싶다면 [request와 response 문서](https://docs.djangoproject.com/ko/3.0/ref/request-response/ )를 참고<br>
+<br>
+제너릭 뷰는 장고에서 기본적으로 제공하는 뷰의 형태입니다. 상속을 통해 편하게 개발할 수 있습니다.
+
