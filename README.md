@@ -79,3 +79,57 @@ from django.contrib import admin
 from .models import Question
 admin.site.register(Question)
 ```
+
+## Part3
+'polls/'를 찾은 후엔, 일치하는 텍스트("polls/")를 버리고, 남은 텍스트인 "34/"를 'polls.urls' URLconf로 전달하여 남은 처리를 진행합니다.
+detail함수에는 다음과 같이 인자가 전달됩니다.
+```python
+detail(request=<HttpRequest object>, question_id=34)
+```
+question_id=34 부분은 <int:question_id> 에서 왔습니다. 괄호를 사용하여 URL 의 일부를 "캡처"하고, 해당 내용을 keyword 인수로서 뷰 함수로 전달합니다.<br>
+<br>
+기본 설정 파일은 APP_DIRS 옵션이 True로 설정된 DjangoTemplates 백엔드를 구성합니다.
+관례에 따라, DjangoTemplates은 각 INSTALLED_APPS 디렉토리의 "templates" 하위 디렉토리를 탐색합니다.
+<br>
+### render()
+```python
+def index(request):
+    latest_question_list = Question.objects.order_by('-pub_date')[:5]
+    context = {'latest_question_list': latest_question_list}
+    return render(request, 'polls/index.html', context)
+```
+render() 함수는 request 객체를 첫번째 인수로 받고, 템플릿 이름을 두번째 인수로 받으며, context 사전형 객체를 세전째 선택적(optional) 인수로 받습니다.
+인수로 지정된 context로 표현된 템플릿의 HttpResponse 객체가 반환됩니다.
+
+### get_object_or_404()
+```python
+def detail(request, question_id):
+    question = get_object_or_404(Question, pk=question_id)
+    return render(request, 'polls/detail.html', {'question': question})
+```
+get_object_or_404() 함수는 Django 모델을 첫번째 인자로 받고, 몇개의 키워드 인수를 모델 관리자의 get() 함수에 넘깁니다.
+만약 객체가 존재하지 않을 경우, Http404 예외가 발생합니다.<br>
+<br>
+또한, get_object_or_404() 함수처럼 동작하는 get_list_or_404() 함수가 있습니다. get() 대신 filter() 를 쓴다는 것이 다릅니다.
+리스트가 비어있을 경우, Http404 예외를 발생시킵니다.<br>
+
+### app_name
+URLconf에 이름공간(namespace)을 추가 하여 어플리케이션의 이름공간을 설정할 수 있습니다.
+```python
+from django.urls import path
+from . import views
+
+app_name = 'polls'
+urlpatterns = [
+    path('', views.index, name='index'),
+    path('<int:question_id>/', views.detail, name='detail'),
+    path('<int:question_id>/results/', views.results, name='results'),
+    path('<int:question_id>/vote/', views.vote, name='vote'),
+]
+```
+이렇게 이름공간을 추가하면 다음과 같이 작성할 수 있습니다.
+```html
+<li><a href="{% url 'polls:detail' question.id %}">{{ question.question_text }}</a></li>
+```
+
+## Part4
