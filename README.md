@@ -150,4 +150,5 @@ request는 HttpRequest 개체입니다.
 HttpRequest 개체에 대해 더 알고 싶다면 [request와 response 문서](https://docs.djangoproject.com/ko/3.0/ref/request-response/ )를 참고<br>
 <br>
 제너릭 뷰는 장고에서 기본적으로 제공하는 뷰의 형태입니다. 상속을 통해 편하게 개발할 수 있습니다.
-
+<br><br>
+Q. Django에서 pk는 항상 id? pk를 다르게 설정할 수 있나요?
